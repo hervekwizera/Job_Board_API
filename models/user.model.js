@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs"; // Make sure to install this: npm install bcryptjs
 
 const userSchema = new mongoose.Schema({
-    name :{
-        type : String,
-        required :[true,'User Name is required'],
+    name: {
+        type: String,
+        required: [true, 'User Name is required'],
         trim: true,
-        minLength:2,
+        minLength: 2,
         maxLength: 50,
     },
     email: {
@@ -13,15 +14,28 @@ const userSchema = new mongoose.Schema({
         required: [true, 'User Email is required'],
         unique: true,
         trim: true,
-        match:[/\S+@\S+\.\S+/,'Please fill a valid email address'],
+        match: [/\S+@\S+\.\S+/, 'Please fill a valid email address'],
     },
-    password:{
+    password: {
         type: String,
-        required: [true,'User Password is required'],
+        required: [true, 'User Password is required'],
         minLength: 6,
     }
-},{ timestamps: true});
+}, { timestamps: true });
 
-const User = mongoose.model('User',userSchema);
+// 🔒 Hash password before saving
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+});
+
+// ✅ Add this method to compare passwords
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
+const User = mongoose.model('User', userSchema);
 
 export default User;

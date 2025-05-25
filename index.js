@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import { PORT } from './config/env.js';
 import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
 import errorMiddleware from './middlewares/error.middleware.js';
@@ -19,8 +19,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use('/api/users', userRouter);
-app.use('/api/auth', authRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter);
 
 // Root route
 app.get('/', (req, res) => {
@@ -33,7 +33,7 @@ mongoose.connect(process.env.db_URI)
     console.log('✅ MongoDB connected');
     const port = process.env.PORT || 5000;
     app.listen(port, () => {
-      console.log(`🚀 Server running on port ${port}`);
+      console.log(`Subscription tracker API is running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => console.error('❌ MongoDB connection error:', err));
