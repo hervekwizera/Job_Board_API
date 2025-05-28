@@ -16,11 +16,13 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+ app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
 
 // Routes
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
+app.use(errorMiddleware);
 
 // Root route
 app.get('/', (req, res) => {
@@ -38,5 +40,5 @@ mongoose.connect(process.env.db_URI)
   })
   .catch((err) => console.error('❌ MongoDB connection error:', err));
 
-// Error handling middleware (should be after all routes)
-app.use(errorMiddleware);
+
+
