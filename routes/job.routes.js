@@ -1,5 +1,5 @@
 import express from 'express';
-import { protect, employer } from '../middleware/auth.middleware.js';
+import { authorize, employer } from '../middlewares/auth.middleware.js';
 import {
   createJob,
   getAllJobs,
@@ -8,15 +8,15 @@ import {
   deleteJob
 } from '../controllers/job.controller.js';
 
-const router = express.Router();
+const jobRouter = express.Router();
 
-router.route('/')
+jobRouter.route('/')
   .get(getAllJobs)
-  .post(protect, employer, createJob);
+  .post(authorize, employer, createJob);
 
-router.route('/:id')
+jobRouter.route('/:id')
   .get(getJobById)
-  .put(protect, employer, updateJob)
-  .delete(protect, employer, deleteJob);
+  .put(authorize, employer, updateJob)
+  .delete(authorize, employer, deleteJob);
 
-export default router;
+export default jobRouter;
