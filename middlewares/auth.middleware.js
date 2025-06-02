@@ -29,15 +29,3 @@ export const authorize = async (req, res, next) => {
   }
 };
 
-// Middleware to restrict access to only employers
-export const employer = (req, res, next) => {
-  try {
-    if (req.user && req.user.role === 'employer') {
-      return next();
-    } else {
-      return res.status(403).json({ message: 'Forbidden: Employers only' });
-    }
-  } catch (error) {
-    res.status(403).json({ message: 'Forbidden', error: error.message });
-  }
-};

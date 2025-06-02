@@ -1,5 +1,5 @@
 import express from 'express';
-import { authorize, employer } from '../middlewares/auth.middleware.js';
+import { authorize} from '../middlewares/auth.middleware.js';
 import {
   createJob,
   getAllJobs,
@@ -12,11 +12,11 @@ const jobRouter = express.Router();
 
 jobRouter.route('/')
   .get(getAllJobs)
-  .post(authorize, employer, createJob);
+  .post(authorize, createJob);
 
 jobRouter.route('/:id')
   .get(getJobById)
-  .put(authorize, employer, updateJob)
-  .delete(authorize, employer, deleteJob);
+  .put(authorize, updateJob)
+  .delete(authorize, deleteJob);
 
 export default jobRouter;
