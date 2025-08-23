@@ -12,9 +12,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
-connectDB();
-
+// Middleware
 app.use(express.json()); // Parse JSON
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(cors()); // Enable CORS
@@ -29,7 +27,24 @@ app.get("/", (req, res) => {
   res.send("Hello World 🌍");
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+// Connect DB and Start server
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to connect to MongoDB", error);
+    process.exit(1); // Exit if DB connection fails
+  }
+};
+
+startServer();
+
+// Graceful shutdown
+process.on("SIGINT", async () => {
+  console.log("🔻 Shutting down server...");
+  await mongoose.connection.close();
+  process.exit(0);
 });
