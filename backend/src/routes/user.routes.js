@@ -1,16 +1,10 @@
 import express from "express";
+import { getUsers, getUserById } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
-// Test: Get all users
-router.get("/", (req, res) => {
-  res.json({ message: "Get all users route working ✅" });
-});
-
-// Test: Get user by ID
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  res.json({ message: `Get user with ID ${id} working ✅` });
-});
+// User Routes
+router.get("/", getUsers);         // GET all users
+router.get("/:id", getUserById);   // GET single user
 
 export default router;
