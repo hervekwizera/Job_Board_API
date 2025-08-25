@@ -2,6 +2,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import mongoose from "mongoose"; // ✅ Added import
 import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/auth.routes.js";
@@ -9,6 +10,7 @@ import userRoutes from "./routes/user.routes.js";
 import jobRoutes from "./routes/job.routes.js";
 
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -46,5 +48,6 @@ startServer();
 process.on("SIGINT", async () => {
   console.log("🔻 Shutting down server...");
   await mongoose.connection.close();
+  console.log("✅ MongoDB connection closed");
   process.exit(0);
 });
