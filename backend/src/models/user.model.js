@@ -26,13 +26,17 @@ const userSchema = new mongoose.Schema(
       enum: ["jobseeker", "employer", "admin"],
       default: "jobseeker",
     },
+    isActive: {
+      type: Boolean,
+      default: true, // soft delete or deactivate feature
+    },
   },
   { timestamps: true }
 );
 
 // 🔑 Hash password before saving
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next(); // skip if password not modified
+  if (!this.isModified("password")) return next(); // skip if unchanged
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
@@ -44,5 +48,4 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 const User = mongoose.model("User", userSchema);
-
 export default User;
