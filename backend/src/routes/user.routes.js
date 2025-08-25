@@ -1,10 +1,21 @@
 import express from "express";
-import { getUsers, getUserById } from "../controllers/user.controller.js";
+import {
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser
+} from "../controllers/user.controller.js";
+import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// User Routes
-router.get("/", getUsers);         // GET all users
-router.get("/:id", getUserById);   // GET single user
+// All routes require authentication
+router.use(protect);
+
+// CRUD Routes
+router.get("/", getUsers);         // Admin only
+router.get("/:id", getUserById);   // Admin or self
+router.put("/:id", updateUser);    // Admin or self
+router.delete("/:id", deleteUser); // Admin or self (soft delete)
 
 export default router;

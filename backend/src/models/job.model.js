@@ -7,39 +7,34 @@ const jobSchema = new mongoose.Schema(
       required: [true, "Job title is required"],
       trim: true,
     },
+    description: {
+      type: String,
+      required: [true, "Job description is required"],
+      trim: true,
+    },
     company: {
       type: String,
-      required: [true, "Company name is required"],
       trim: true,
     },
     location: {
       type: String,
-      required: [true, "Location is required"],
-    },
-    type: {
-      type: String,
-      enum: ["Full-Time", "Part-Time", "Contract", "Internship", "Remote"],
-      default: "Full-Time",
-    },
-    description: {
-      type: String,
-      required: [true, "Job description is required"],
+      trim: true,
     },
     salary: {
       type: Number,
-      default: 0,
-    },
-    skills: {
-      type: [String], // Array of skills e.g. ["JavaScript", "React", "Node.js"]
-      default: [],
+      min: [0, "Salary cannot be negative"],
     },
     postedBy: {
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: "User", // assuming you’ll have a User model later
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // link to the user (employer) who posted
       required: true,
     },
+    isActive: {
+      type: Boolean,
+      default: true, // for soft delete or deactivated jobs
+    },
   },
-  { timestamps: true } // adds createdAt & updatedAt
+  { timestamps: true }
 );
 
 const Job = mongoose.model("Job", jobSchema);
