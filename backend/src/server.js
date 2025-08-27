@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose"; 
 import connectDB from "./config/db.js";
+ 
+import rateLimiter from "./middleware/rateLimiter.js";
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
@@ -19,8 +21,10 @@ const app = express();
 
 // ✅ Middlewares
 app.use(express.json()); // Parse JSON requests
+app.use(rateLimiter);
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(cors()); // Enable CORS for all origins
+
 
 // ✅ API Routes
 app.use("/api/v1/auth", authRoutes);
