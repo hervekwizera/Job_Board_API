@@ -87,3 +87,8 @@ jobboard-api/
 ├── package.json
 ├── README.md
 └── LICENSE
+
+
+
+this project will continue with some remaining integrations
+
